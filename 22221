@@ -1,0 +1,182 @@
+create table patient(
+pat_id int primary key,
+pat_fname nvarchar(50),
+pat_lname nvarchar(50),
+pat_address nvarchar(50),
+pat_city nvarchar(50),
+pat_state nvarchar(50),
+);
+
+
+create table Appointment(
+App_id int primary key,
+App_date date,
+App_time int,
+App_duration int,
+app_reason nvarchar(50),
+pat_id int foreign key references patient(pat_id)
+);
+
+
+
+create table Doctor(
+Doc_id int primary key,
+Doc_fname nvarchar(50),
+Doc_lname nvarchar(50),
+App_id int foreign key references Appointment(App_id)
+);
+
+--INSERT STATEMENT
+
+insert into patient values(1,'ahmed','mohamed','manshia street','alex','egypt');
+insert into patient values(2,'ismail','mohamed','gamal abdelnaser street','alex','egypt');
+insert into patient values(3,'gamal','salem','mandara','alex','egypt');
+insert into patient values(4,'ibrahim','mohamed','maherm beh street','alex','egypt');
+insert into patient values(5,'saed','naser','mohamed atia street','alex','egypt');
+insert into patient values(6,'mahmoud','abdallah','elray street','kafr elshiekh','egypt');
+insert into patient values(7,'hady','mohamed','elzearaa street','kafr','egypt');
+
+select *from patient
+
+insert into Appointment values(10,'10-2-2020',2,6,'suffer from head',1);
+insert into Appointment values(11,'10-2-2020',1,9,'suffer from neck',2);
+insert into Appointment values(12,'10-5-2020',4,8,'suffer from nose',3);
+insert into Appointment values(13,'3-2-2020',5,9,'suffer from eyes',4);
+insert into Appointment values(14,'2-3-2020',6,3,'suffer from head',5);
+insert into Appointment values(15,'2-4-2020',7,2,'suffer from legs',6);
+insert into Appointment values(16,'1-8-2020',8,1,'suffer from hands',7);
+
+select*from Appointment
+
+insert into Doctor values(20,'fares','ahmed',10);
+insert into Doctor values(21,'osame','mohamed',10);
+insert into Doctor values(23,'samy','sadek',10);
+insert into Doctor values(24,'aly','saed',10);
+insert into Doctor values(25,'loay','tamer',10);
+insert into Doctor values(26,'hamza','ahmed',10);
+
+select*from Doctor
+
+--SELECT STATMENTS
+
+--1-what is the usage of the ASCII function ?
+SELECT ASCII(pat_fname) AS NumCodeOfFirstChar
+FROM patient;
+--2-what is the usage of the CHAR function ?
+SELECT CHAR(65) AS CodeToCharacter;
+--3-how to know the position of any letter in any word?
+SELECT CHARINDEX('t', 'patient') AS MatchPosition;
+--4-how to contact between two words?
+SELECT CONCAT('salem', 'ibrahim');
+--5-what is the usage of the DATALENGTH function?
+SELECT DATALENGTH('suffer from head');
+--6-what is the usage of the DIFFERENCE function?
+SELECT DIFFERENCE('salem', 'ibrahim');
+--7-how to shift left letters in the word?
+SELECT LEFT('patient', 3) AS ExtractString;
+--8-what is the usage of the LEN function?
+SELECT LEN('suffer from hands');
+--9-how to make the letters of words lower?
+SELECT LOWER('mohamed');
+--10-what is the usage of the LTRIM function?
+SELECT LTRIM('     patient') AS LeftTrimmedString;
+--11-what is the usage of the NCHAR function?
+SELECT NCHAR(65) AS NumberCodeToUnicode;
+--12-how to know the number of position of any letter?
+SELECT PATINDEX('o', 'doctor');
+--13-what is the usage of the QUOTENAME function?
+SELECT QUOTENAME('rty');
+--14-how to replace two letters in word?
+SELECT REPLACE('gamal', 'l', 's');
+--15-how to reverse the letters of the word?
+SELECT REVERSE('salem');
+--16-what is the usage of the RIGHT function?
+SELECT RIGHT('Appointment', 3) AS ExtractString;
+--17-what is the usage of the RTRIM function?
+SELECT RTRIM('patient    ') AS RightTrimmedString;
+--18-what is the usage of the SPACE function?
+SELECT SPACE(17);
+--19-what is the usage of the UNICODE function?
+SELECT UNICODE('kamal');
+--20-what is the usage of the UPPER function?
+SELECT UPPER('suffer from nose');
+
+--SUP QUERY STATEMENT 
+
+SELECT pat_fname FROM patient WHERE pat_id in (SELECT pat_id FROM Appointment WHERE App_id >12)
+SELECT Doc_lname FROM Doctor WHERE Doc_id in (SELECT Doc_id FROM patient WHERE pat_id >2)
+SELECT App_reason FROM Appointment WHERE App_id in (SELECT App_id FROM patient WHERE pat_id >4)
+
+select*from Doctor
+select*from Appointment
+select*from patient
+
+--JOIN STATEMENT 
+
+ SELECT  pat_fname, Doc_fname
+   FROM patient
+   INNER JOIN Doctor
+   ON patient.pat_id = Doctor.Doc_id;
+
+SELECT Pat_city, Doc_Lname
+   FROM patient
+   LEFT JOIN Doctor
+   ON patient.pat_id = Doctor.Doc_id;
+
+SELECT pat_state, App_duration
+  FROM patient
+  RIGHT JOIN Appointment
+  ON patient.pat_id = Appointment.App_id;
+
+SELECT Pat_address, App_reason
+  FROM patient
+  FULL JOIN Appointment
+  ON patient.pat_id = Appointment.App_id;
+
+
+SELECT Doc_fname,App_time
+  FROM Doctor,Appointment
+  WHERE Doctor.Doc_id=Appointment.App_id
+
+--COUNT AND GROUP STATEMENT
+
+--what is the number of patient ?
+SELECT COUNT(pat_id)
+  FROM patient
+--what is the number of doctor ?
+SELECT COUNT(Doc_id)
+  FROM Doctor
+
+SELECT COUNT(pat_id),pat_fname
+  FROM patient
+ GROUP BY pat_fname
+
+--UPDATE STATEMENT
+
+UPDATE patient
+set pat_fname='yasser' where pat_id=1
+UPDATE Doctor
+set Doc_fname='hany' where Doc_id=21
+UPDATE patient
+set pat_city='kafr' where pat_id=3
+UPDATE Appointment
+set App_duration=5 where App_id=11
+UPDATE Doctor
+set Doc_lname='kamal' where Doc_id=22
+
+select*from Doctor
+select*from Appointment
+select*from patient
+
+--DELETE STATEMENT 
+
+
+DELETE from Doctor where Doc_id=26
+DELETE from patient where pat_id=6
+DELETE from patient where pat_id=7
+DELETE from Appointment where App_id=15
+DELETE from Appointment where App_id=16
+
+select*from Doctor
+select*from Appointment
+select*from patient
